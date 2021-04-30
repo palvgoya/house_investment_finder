@@ -9,7 +9,6 @@ import geopandas as gpd
 import folium
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import MinMaxScaler
-import time
 import plotly.graph_objects as go
 import pydeck as pdk
 import urllib.request as request
@@ -24,19 +23,14 @@ st.title('Find the best house investment in Madrid')
 
 st.image('https://www.unicainmobiliaria.com/fileuploads/user/viviendas%20de%20lujo%20en%20Madrid_UNICA%20Inmobiliaria.jpg')
 
-#my_bar = st.progress(0)
-#for p in range(100):
-    #time.sleep(0.5)
-    #my_bar.progress(p + 1)
 
 
 st.header('Analize the housing market in Madrid and find the ***best home*** for you')
-
+st.write('')
+st.write('')
 st.write('Please select the area to show you the top 10 houses by estimated profit now')
 
 #Loading data
-
-#st.sidebar.header('User input features')
 
 @st.cache
 def load_data():
@@ -56,7 +50,6 @@ df_selected_zone= results_mh[(results_mh.zona.isin(selected_zone))]
 df_selected_zone.sort_values(by=['profit_now'], axis=0, ascending= False, inplace=True)
 
 #Table
-#st.dataframe(df_selected_zone)
 
 figtable= go.Figure(data=[go.Table(
     columnwidth=[200,300],
@@ -70,7 +63,7 @@ figtable= go.Figure(data=[go.Table(
                fill_color='lightgrey',
                align='center',
                font_size=10))])
-figtable.update_layout(width=800, margin=dict(l=0,r=0,b=0,t=0))
+figtable.update_layout(height=250, width=800, margin=dict(l=0,r=0,b=0,t=0))
 st.plotly_chart(figtable)
 
 
@@ -125,8 +118,6 @@ df_4_maps['bathrooms']=df_4_maps['bathrooms'].astype(int)
 
 graphmap_mad= folium.Map(location=[40.4881, -3.6683], zoom_start=9)
 
-#df_folium_select= df_4_maps[(df_4_maps[selected_prediction])]
-
 bins_mkt = list(df_4_maps[selected_prediction].quantile([0, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1]))
 
 folium.Choropleth(
@@ -153,66 +144,39 @@ folium_static(graphmap_mad)
 
 
 
-#def load_latlon_data():
-#    latlon_data_path = 'https://drive.google.com/uc?export=download&id=1YkITITRC3TARj9x19tA-7fGdwJBvWm94'
-#    latlon = pd.read_csv(latlon_data_path)
-#    latlon.drop(columns=['Unnamed: 0', 'post_code', 'rooms', 'bathrooms', 'size',
-#    'poblacion', 'latlon_merged', 'transport', 'school', 'health_centre'], inplace=True)
-#    return latlon
-#latlon_data=load_latlon_data()
+# Dynamic 3D graph showing prices per m2 in Madrid by post code
 
-#pydeck_data=mad_map.merge(df_4_maps,left_on='COD_POSTAL', right_on='post_code')
-#pydeck_data.drop(columns=['post_code', 'rooms', 'bathrooms', 'size',
-#'pred_2020_market', 'price_pred_2030', 'profit_now','profit_future'], inplace=True)
-#pydeck_data.to_json()
-
-#hex_layer= pdk.Layer(
-#  'HexagonLayer',
-#    data=latlon_data,
-#   get_position='[lon, lat]',
-#   radius=250,
-#   elevation_scale=4,
-#   elevation_range=[0, 1000],
-#   pickable=True,
-#   extruded=True)
-
-
-#json = pd.read_json(pydeck_url)
-#pydeck_data = pd.DataFrame()
-#pydeck_data["coordinates"] = json["features"].apply(lambda row: row["geometry"]["coordinates"])
-#pydeck_data["valuePerSqm"] = json["features"].apply(lambda row: row["properties"]["COD_POSTAL"])
-#pydeck_data["elevation"] = json["features"].apply(lambda row: row["properties"]["superficie_edificable"])
-#pydeck_data["elevation"] = json["features"].apply(lambda row: calculate_elevation(row["properties"]["ID_CP"]))
-#pydeck_data["fill_color"] = json["features"].apply(lambda row: color_scale(row["properties"]["growth"]))
+st.write(' In this dynamic 3D map we can see prices per square metre are super concentrated in the centre of Madrid')
 
 map=st.empty()
 
-#pydeck_url= 'https://raw.githubusercontent.com/palvgoya/house_investment_finder/main/pdk_madhouse_df.geojson'
-#pydeck_data = requests.get(pydeck_url).json()
+st.cache(allow_output_mutation=True)
+def pdk_data():
+    with request.urlopen('https://raw.githubusercontent.com/palvgoya/house_investment_finder/main/pdk_madhouse_df.geojson') as response:
+            if response.getcode() == 200:
+                source = response.read()
+                pydeck_data = json.loads(source)
+            else:
+                print('An error occurred while attempting to retrieve data from the API.')
+    return pydeck_data
 
-with request.urlopen('https://raw.githubusercontent.com/palvgoya/house_investment_finder/main/pdk_madhouse_df.geojson') as response:
-        if response.getcode() == 200:
-            source = response.read()
-            pydeck_data = json.loads(source)
-        else:
-            print('An error occurred while attempting to retrieve data from the API.')
-
+pydeck_data1= pdk_data()
 
 geojson_layer= pdk.Layer(
 'GeoJsonLayer',
-data=pydeck_data,
-opacity=0.9,
+data= pydeck_data1,
+opacity=0.8,
 stroked=False,
 filled=True,
 extruded=True,
 wireframe=True,
-get_elevation= 'properties.market_per_m2',
-get_fill_color= [255, 255, 255],
-get_line_color=[255, 165, 0],
-pickable=True)
+get_elevation= 'properties.market_per_m2 * 5',
+get_fill_color= [240, 237,55],
+get_line_color=[255, 255, 255],
+pickable=False)
 
 onsale_pdk= pdk.Deck(
-     map_style='mapbox://styles/mapbox/light-v9',
+map_style='mapbox://styles/mapbox/light-v9',
      initial_view_state=pdk.ViewState(
          latitude=40.4081,
          longitude=-3.6683,
@@ -220,13 +184,15 @@ onsale_pdk= pdk.Deck(
          pitch=50),
      layers=[geojson_layer])
 
-#map.pydeck_chart(onsale_pdk)
+map.pydeck_chart(onsale_pdk)
 #onsale_pdk.to_html()
-st.pydeck_chart(onsale_pdk)
+#st.pydeck_chart(onsale_pdk)
 
 
 #Lets build a house price estimator
 st.header('Please introduce the information below to know the price of your house now and the prediction we have for 2030')
+st.write('')
+st.write('')
 
 @st.cache
 def load_x():
