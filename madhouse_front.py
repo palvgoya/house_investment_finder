@@ -71,13 +71,13 @@ st.plotly_chart(figtable)
 st.write('The boxplot shows how each zone compares to each other showing averages and quartiles')
 
 fig1= plt.figure(figsize=(11,6))
-ax1= sns.boxplot(x= 'zona',y= 'prices',data= df_selected_zone).set_title('Prices By Area')
+ax1= sns.boxplot(x= 'zona',y= 'prices',data= df_selected_zone, palette= 'Set2').set_title('Prices By Area')
 st.pyplot(fig1)
 
 
 #Boxplot by number of rooms
 figroom= plt.figure(figsize=(11,6))
-axroom= sns.boxplot(x= 'rooms',y= 'market_per_m2',data= df_selected_zone).set_title('Price/m2 By Number of Rooms')
+axroom= sns.boxplot(x= 'rooms',y= 'market_per_m2',data= df_selected_zone, palette='Blues').set_title('Price/m2 By Number of Rooms')
 st.pyplot(figroom)
 
 
@@ -97,7 +97,7 @@ onehot_enc_zones = pd.get_dummies(results_mh['zona'])
 results_mh_corr = pd.concat([results_mh, onehot_enc_zones], axis=1, join="inner")
 fig2, ax = plt.subplots(figsize=(12,10))
 corr = results_mh_corr.corr()
-ax2= sns.heatmap(corr, mask=np.zeros_like(corr, dtype=np.bool), cmap=sns.diverging_palette(220, 10, as_cmap=True),
+ax2= sns.heatmap(corr, mask=np.zeros_like(corr, dtype=np.bool), cmap="RdBu", linewidths = 0.5,
             square=True, ax=ax)
 st.pyplot(fig2)
 
@@ -172,7 +172,7 @@ extruded=True,
 wireframe=True,
 get_elevation= 'properties.market_per_m2 * 5',
 get_fill_color= [240, 237,55],
-get_line_color=[255, 255, 255],
+get_line_color=[195,195,195],
 pickable=False)
 
 onsale_pdk= pdk.Deck(
