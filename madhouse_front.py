@@ -146,7 +146,7 @@ folium_static(graphmap_mad)
 
 # Dynamic 3D graph showing prices per m2 in Madrid by post code
 
-st.write(' In this dynamic 3D map we can see prices per square metre are super concentrated in the centre of Madrid')
+st.write(' In this dynamic 3D map we can see prices are more under their estimation in the outskirts which means the centre is not an opportunity at the moment but it´s a more secure investment because are going to keep growing in the next years')
 
 map=st.empty()
 
@@ -170,7 +170,7 @@ stroked=False,
 filled=True,
 extruded=True,
 wireframe=True,
-get_elevation= 'properties.market_per_m2 * 5',
+get_elevation= 'properties.profit_now * 100000',
 get_fill_color= [240, 237,55],
 get_line_color=[195,195,195],
 pickable=False)
