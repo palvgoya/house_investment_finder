@@ -1,4 +1,8 @@
-![](https://www.pngitem.com/pimgs/m/151-1510456_home-construction-clipart-png-property-house-logo-png.png)
+<p align="center">
+  <b></b><br>
+  <img src="https://www.pngitem.com/pimgs/m/151-1510456_home-construction-clipart-png-property-house-logo-png.png">
+</p>
+
 # **Find the Best House Investment in Madrid (Spain)**
 
 
@@ -7,6 +11,11 @@
 The main idea of this project was to find the best investment in the housing market in Madrid at the moment. There are other similar studies related to the housing market in different locations but nothing related to Madrid.
 
 We recognize this city is completely different compared to other Spanish cities like coastal or vacation cities where we historically found more buying interest. But nowadays Madrid is where investors come when they plan to invest in buildings and houses, we have a great economic growth, a mix of different potential clients (from students to business or tourists), great universities, big international and national companies and great tourist attractions.
+
+<p align="center">
+  <b></b><br>
+  <img src="https://wolfstreet.com/wp-content/uploads/2019/05/Spain-home-price-2019-Q1-national.png">
+</p>
 
 #### 2- Data Description
 
@@ -52,3 +61,14 @@ Below that there are two map charts, one has a slider where you can select betwe
 The next map chart is a 3D Pydeck chart that shows the estimated profit now (underpriced areas).
 
 Last but not least you can put data of a house (number of rooms, bathrooms, size and postcode) and the Random Forest Regression model will give you a price estimation and the average of that area. It loses accuracy over 200m2 and over 5 rooms or bathrooms because this data is not included in the model.
+
+<p align="center">
+  <b></b><br>
+  | <a href="https://share.streamlit.io/palvgoya/house_investment_finder/main/madhouse_front.py#find-the-best-house-investment-in-madrid">Click to go to the frontend application</a> |
+</p>
+
+<p align="center">
+  <b></b><br>
+  <br><br>
+  <img src="https://www.iberian.property/media/image/2017/11/28/madrid_shutterstock_245037493.jpg">
+</p>
